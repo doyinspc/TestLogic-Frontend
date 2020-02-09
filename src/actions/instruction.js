@@ -5,6 +5,7 @@ import {
     INSTRUCTION_GET,
     INSTRUCTION_GET_ONE,
     INSTRUCTION_GET_MULTIPLE,
+    INSTRUCTION_GET_MULTIPLE_SEC,
     INSTRUCTION_REGISTER_SUCCESS,
     INSTRUCTION_REGISTER_FAIL,
     INSTRUCTION_LOADING,
@@ -41,6 +42,24 @@ export const getInstructions = (id) => (dispatch, getState) => {
                     payload: err
                 })
             })
+};
+//GET ALL INSTRUCTION 
+export const getInstructionsList = (id) => (dispatch, getState) => {
+    let paths = `${path}/instruction/cat/${id}` 
+    axios.get(paths, instructionSetConfig(getState))
+        .then(res => {
+            dispatch({
+                type: INSTRUCTION_GET_MULTIPLE_SEC,
+                payload: res.data,
+                topic: id
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : INSTRUCTION_LOADING_ERROR,
+                payload: err
+            })
+        })
 };
 export const getInstruction = (num) => (dispatch, getState) => {
         let paths = `${path}/instruction/${num}` ;
@@ -84,7 +103,7 @@ export const registerInstruction = (data) => (dispatch) => {
             })
         })
 };
-//INSTRUCTION EDIT/DELETE
+//INSTRUCTION EDIT
 export const updateInstruction = (data, id) => (dispatch, getState) => {
     //body
     const config ={
@@ -92,15 +111,14 @@ export const updateInstruction = (data, id) => (dispatch, getState) => {
              'Content-Type':'application/json'
         }
     }
-    
     let paths = `${path}/instruction/update/${id}` 
-    let body =  JSON.stringify(data)
+    let body =  JSON.stringify(data);
     data['id'] = id;
     axios.patch(paths, body, config)
         .then(res => {
             dispatch({
                 type: INSTRUCTION_UPDATE_SUCCESS,
-                payload: data
+                payload: res.data[0]
             })
         })
         .catch(err => {
@@ -110,6 +128,55 @@ export const updateInstruction = (data, id) => (dispatch, getState) => {
             })
         })
 };
+
+//INSTRUCTION EDIT/DELETE
+export const groupInstruction = (id, groupNumber) => (dispatch, getState) => {
+    //body
+    const config ={
+        headers:{
+             'Content-Type':'application/json'
+        }
+    }
+    let paths = `${path}/instruction/group/${id}` 
+    let body =  JSON.stringify({grp:groupNumber});
+    axios.patch(paths, body, config)
+        .then(res => {
+            dispatch({
+                msg: 'done'
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : INSTRUCTION_UPDATE_FAIL,
+                payload: err
+            })
+        })
+};
+
+// MOVE INSTRUCTION 
+export const moveInstruction = (id, groupNumber) => (dispatch, getState) => {
+    //body
+    const config ={
+        headers:{
+             'Content-Type':'application/json'
+        }
+    }
+    let paths = `${path}/instruction/move/${id}` 
+    let body =  JSON.stringify({instructionID:groupNumber});
+    axios.patch(paths, body, config)
+        .then(res => {
+            dispatch({
+                msg: 'done'
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : INSTRUCTION_UPDATE_FAIL,
+                payload: err
+            })
+        })
+};
+
 
 //INSTRUCTION DELETE
 export const deleteInstruction = (id) => (dispatch, getState) =>{

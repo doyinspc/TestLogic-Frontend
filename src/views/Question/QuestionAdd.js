@@ -89,8 +89,6 @@ class Form extends React.Component {
     e.preventDefault();
     const newInstruction = this.state.values.instruction;
     const currentInstruction = this.props.instructionID;
-    console.log(newInstruction);
-    console.log(this.state.rows.length);
     if(newInstruction && this.state.rows.length > 0)
     {
       this.props.moveQuestion({currentInstruction: currentInstruction, instructionID:newInstruction, questionID:this.state.rows });

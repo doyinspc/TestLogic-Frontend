@@ -87,7 +87,6 @@ function CustomTable({ ...props }) {
     setDistractors(newD);
     setEditdistractorrow(newDR);
   }
-
   const onchangeQuestion = (e, qid) =>{
     let newQ = {...editquestionrow};
     newQ[`name${qid}`] =  e.target.value;
@@ -131,21 +130,18 @@ function CustomTable({ ...props }) {
     setDistractors(newD);
     setEditdistractorrow(newDR);
   }
-
   const submitQuestion = qid =>{
     let q = editquestionrow[`namenew`];
     if(qid && qid > 0){
         props.registerQuestion({instructionID:qid, question:q}, qid);
     }
   }
-
   const updateQuestion = qid =>{
     let q = editquestionrow[`name${qid}`];
     if(qid && qid > 0){
         props.updateQuestion({question:q}, qid);
     }
   }
-
   const updateAnswer = qid =>{
     let ans = answers[`rig${qid}`];
     let rid = editanswerrow[`rig${qid}`];
@@ -173,20 +169,6 @@ function CustomTable({ ...props }) {
       }
     }
   }
-
-  // const checkQuestion = value =>{
-  //   const currentIndex = checks.indexOf(value);
-  //   const newChecked = [...checks];
-
-  //   if (currentIndex === -1) {
-  //     newChecked.push(value);
-  //   } else {
-  //     newChecked.splice(currentIndex, 1);
-  //   }
-  //   setChecks(newChecked);
-  //   console.log(checks)
-  // }
-
   const changeToArray = (data) =>{
     let arr = data.split(',');
     let newArr = {};
@@ -196,7 +178,6 @@ function CustomTable({ ...props }) {
     })
     return newArr;
   }
-
   const changeToList = (id, data, changeToText, status) =>{
     if(data){
     let arr = data.split(',');
@@ -212,7 +193,6 @@ function CustomTable({ ...props }) {
       return changeToText(id, {}, status);
     }
   }
-
   const changeToText = (id, data, status) =>{
     let linkz = <ListQuestion 
                     qid ={id}

@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect }from 'react-redux';
+import CKEditor from 'ckeditor4-react';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import Input from "@material-ui//core/Input";
@@ -45,6 +46,7 @@ class Form extends React.Component {
       name: null,
       content:null,
       contenttitle:null,
+      contentsource:null,
       errors: {}
     };
    
@@ -53,6 +55,18 @@ class Form extends React.Component {
   onChange = e => {
     this.setState({[e.target.name] : e.target.value})
   }
+
+  onEditorChange = ( evt )=>{
+    this.setState( {
+        content: evt.editor.getData()
+    } );
+  }
+
+handleChange=( changeEvent )=>{
+    this.setState( {
+        data: changeEvent.target.value
+    } );
+}
 
   handleClose = () => {
     this.props.toggleForm(false);
@@ -63,9 +77,12 @@ class Form extends React.Component {
     this.setState({
       name :  '',
       content: '',
-      contenttitle: ''
+      contenttitle: '',
+      contentsource:''
     })
   }
+
+
   reloadData = () => {
     if(this.props.isEdit > 0)
     {
@@ -74,7 +91,8 @@ class Form extends React.Component {
         theme: this.props.instruction.theme,
         name :  this.props.instruction.instruction.name,
         content :  this.props.instruction.instruction.content,
-        contenttitle :  this.props.instruction.instruction.contenttitle
+        contenttitle :  this.props.instruction.instruction.contenttitle,
+        contentsource :  this.props.instruction.instruction.contentsource
       })
     }else
     {
@@ -83,7 +101,8 @@ class Form extends React.Component {
         theme: this.props.instruction.theme,
         name :  '',
         content: '',
-        contenttitle: ''
+        contenttitle: '',
+        contentsource: ''
       })
     }
     
@@ -96,7 +115,8 @@ class Form extends React.Component {
         theme: this.props.instruction.theme,
         name :  this.props.instruction.instruction.name,
         content :  this.props.instruction.instruction.content,
-        contenttitle :  this.props.instruction.instruction.contenttitle
+        contenttitle :  this.props.instruction.instruction.contenttitle,
+        contentsource :  this.props.instruction.instruction.contentsource
       })
     }else
     {
@@ -105,7 +125,8 @@ class Form extends React.Component {
         theme: this.props.instruction.theme,
         name :  '',
         content :  '',
-        contenttitle :  ''
+        contenttitle :  '',
+        contentsource:  ''
       })
     }
     
@@ -118,6 +139,7 @@ class Form extends React.Component {
         name :  nextProps.instruction.instruction.name,
         content :  nextProps.instruction.instruction.content,
         contenttitle :  nextProps.instruction.instruction.contenttitle,
+        contentsource :  nextProps.instruction.instruction.contentsource
       })
     }
      
@@ -125,8 +147,8 @@ class Form extends React.Component {
 
   onSubmit = e => {
     e.preventDefault();
-    const {theme,  name, content, contenttitle } = this.state;
-    const instruction = { theme, name, content, contenttitle };
+    const {theme,  name, content, contentsource, contenttitle } = this.state;
+    const instruction = { theme, name, content, contentsource, contenttitle };
     if(this.props.instruction.isEdit > 0 )
     {
       this.props.updateInstruction(instruction, this.props.instruction.isEdit); 
@@ -142,7 +164,7 @@ class Form extends React.Component {
       this.reloadData()
     }
     const { classes, instruction }  = this.props;
-    const { errors, name, content, contenttitle } = this.state;
+    const { errors, name, content, contentsource, contenttitle } = this.state;
     return (
       <div>
         <GridContainer>
@@ -173,11 +195,12 @@ class Form extends React.Component {
                           name: "name"
                         }}
                       />
+                      
                     </GridItem>
-                    <GridItem xs={12} sm={12} md={12}>
+                    <GridItem xs={12} sm={12} md={6}>
                     <CustomInput
                         labelText="Content Title"
-                        id="contenttile"
+                        id="contenttitle"
                         type="text"
                         onChange={this.onChange}
                         error={errors.contenttitle}
@@ -185,14 +208,31 @@ class Form extends React.Component {
                           fullWidth: true
                         }}
                         inputProps={{
-                          required: true,
+                          required: false,
                           value: contenttitle || '',
                           name: "contenttitle"
                         }}
                       />
                     </GridItem>
+                    <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                        labelText="Content Source"
+                        id="contentsource"
+                        type="text"
+                        onChange={this.onChange}
+                        error={errors.contentsource}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          required: false,
+                          value: contentsource || '',
+                          name: "contentsource"
+                        }}
+                      />
+                    </GridItem>
                     <GridItem xs={12} sm={12} md={12}>
-                    <Input
+                    {/* <Input
                         labelText="Content"
                         id="content"
                         type="text"
@@ -208,6 +248,18 @@ class Form extends React.Component {
                         rows="10"
                         fullWidth
                       />
+                     */}
+                    <CKEditor 
+                    data={content}
+                    onChange={this.onEditorChange}
+                    
+                    mathJaxLib={'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML'}
+                    
+                    config={{
+                      extraPlugins: ['mathjax']
+                      
+                    }}
+                     />
                     </GridItem>
                   </GridContainer>
                 </CardBody>

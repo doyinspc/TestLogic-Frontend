@@ -5,6 +5,7 @@ import {
     TOPIC_GET,
     TOPIC_GET_ONE,
     TOPIC_GET_MULTIPLE,
+    TOPIC_GET_MULTIPLE_SEC,
     TOPIC_REGISTER_SUCCESS,
     TOPIC_REGISTER_FAIL,
     TOPIC_LOADING,
@@ -26,7 +27,7 @@ const path = API_PATH;
 
 //GET ALL TOPIC 
 export const getTopics = (id) => (dispatch, getState) => {
-        let paths = `${path}/topic/mult/${id}` 
+        let paths = `${path}/topic/cat/${id}` 
         axios.get(paths, topicSetConfig(getState))
             .then(res => {
                 dispatch({
@@ -41,6 +42,24 @@ export const getTopics = (id) => (dispatch, getState) => {
                     payload: err
                 })
             })
+};
+//GET ALL TOPIC 
+export const getTopicsList = (id) => (dispatch, getState) => {
+    let paths = `${path}/topic/cat/${id}` 
+    axios.get(paths, topicSetConfig(getState))
+        .then(res => {
+            dispatch({
+                type: TOPIC_GET_MULTIPLE_SEC,
+                payload: res.data,
+                theme: id
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : TOPIC_LOADING_ERROR,
+                payload: err
+            })
+        })
 };
 export const getTopic = (num) => (dispatch, getState) => {
         let paths = `${path}/topic/${num}` ;
@@ -100,9 +119,11 @@ export const updateTopic = (data, id) => (dispatch, getState) => {
     data['id'] = id;
     axios.patch(paths, body, config)
         .then(res => {
+            console.log(res)
             dispatch({
                 type: TOPIC_UPDATE_SUCCESS,
-                payload: data
+                payload: res.data[0],
+                id:id
             })
         })
         .catch(err => {
@@ -124,10 +145,10 @@ export const deleteTopic = (id) => (dispatch, getState) =>{
                 payload: res.data
             })
         })
-        .catch(err => {
+        .catch(errr => {
             dispatch({
                 type : TOPIC_DELETE_FAIL,
-                payload : err
+                payload : errr
             })
         })
         

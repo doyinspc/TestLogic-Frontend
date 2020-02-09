@@ -27,7 +27,7 @@ import CalendarViewDay from "@material-ui/icons/CalendarViewDay";
 
 // core components
 import tableStyle from "assets/jss/material-dashboard-react/components/tasksStyle.jsx";
-import { editTopic, deleteTopic, toggleTopic, activateTopic } from  "../../actions/topic";
+import { editTopic, deleteTopic, toggleTopic, activateTopic, updateTopic } from  "../../actions/topic";
 
 
 
@@ -42,8 +42,16 @@ function CustomTable({ ...props }) {
   const handleDelete = (num) => {
     props.deleteTopic(num)
   }
-  const handleToggle= (num) => {
-    props.activateTopic(num)
+
+  const handleToggle= (num, active) => {
+    if(active == 1)
+    {
+      props.updateTopic({active:0}, num);
+    }
+    else
+    {
+      props.updateTopic({active:1}, num);
+    }
   }
   const activeID= (num) => {
     props.activateTopic(num)
@@ -114,7 +122,7 @@ function CustomTable({ ...props }) {
                   </IconButton>
                 </Tooltip>
                 </span>
-                <span onClick={() => handleToggle(alu.id)}>
+                <span onClick={() => handleToggle(alu.id, alu.active)}>
                 <Tooltip
                   id="tooltip-top-start"
                   title="Activate/Deactivate"
@@ -181,4 +189,4 @@ CustomTable.propTypes = {
 const mapStateToProps = state => ({ 
   topic: state.topicReducer
 })
-export default connect(mapStateToProps, {editTopic, deleteTopic, toggleTopic, activateTopic})(withStyles(tableStyle)(CustomTable));
+export default connect(mapStateToProps, {editTopic, deleteTopic, toggleTopic, activateTopic, updateTopic})(withStyles(tableStyle)(CustomTable));

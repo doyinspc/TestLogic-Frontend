@@ -57,9 +57,9 @@ render(){
 
   const { classes, instruction, topic, topics, themes, subjects, id } = this.props;
   let headArr =  instruction.showActions ? ["SN","Instruction", "Action"]: ["SN","Instruction"];
-  let top = topics && Array.isArray(topics) && topics.length > 0 ? topics.filter((alu)=> alu.id == id)[0]:{};
-  let the = themes && Array.isArray(themes) && themes.length > 0 ? themes.filter((alu)=> alu.id == top.themeID)[0]:{};
-  let sub = subjects && Array.isArray(subjects) && subjects.length > 0 ? subjects.filter((alu)=> alu.id == the.subjectID)[0]:{};
+  let top = topics && Array.isArray(topics) && topics.length > 0 ? topics.filter((alu)=> alu.id == id)[0]: {name:'None'};
+  let the = themes && Array.isArray(themes) && themes.length > 0 && top ? themes.filter((alu)=> alu.id == top.themeID)[0]:  {name:'None'};
+  let sub = subjects && Array.isArray(subjects) && subjects.length > 0 && the ? subjects.filter((alu)=> alu.id == the.subjectID)[0]: {name:'None'};
   
   return (
     <GridContainer>
@@ -69,13 +69,11 @@ render(){
         <Card>
           <CardHeader  style={{ display:'flex', flexDirection:'row', justifyContent: 'space-between'}} color="primary">
             <div className="col-md-5">
-            <h4 className={classes.cardTitleWhite}>{top.name || ''}</h4>
-            <p className={classes.cardCategoryWhite}>
-              {sub.name+' | '+the.name}
-            </p>
+            <h4 className={classes.cardTitleWhite}>{top ? top.name: '' || ''}</h4>
+            <p className={classes.cardCategoryWhite}>{sub ? sub.name: ''  +' | '+ the  ? the.name: ''}</p>
             </div>
             <div>
-              <InstructionNavbar id={top.themeID}/>
+              <InstructionNavbar id={top? top.themeID : ''}/>
             </div>
           </CardHeader>
           <CardBody>

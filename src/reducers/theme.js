@@ -1,5 +1,6 @@
 import {
     THEME_GET_MULTIPLE,
+    THEME_GET_MULTIPLE_SEC,
     THEME_GET_ONE,
     THEME_REGISTER_SUCCESS,
     THEME_REGISTER_FAIL,
@@ -25,6 +26,7 @@ const initialState = {
     isLoading: false,
     themes: the,
     theme: {},
+    themesList:[],
     subject: localStorage.getItem('subject') || null ,
     msg: null,
     isEdit: 0,
@@ -36,7 +38,7 @@ const changeState = (aluu, actid) =>
 {
     let newTHEME = [...aluu];
     newTHEME.forEach(alu => {
-        if(alu.id == actid.id){
+        if(alu.id === actid.id){
             alu.is_active = actid.is_active
         }
     });
@@ -94,6 +96,11 @@ export default function(state = initialState, action){
                 subject: action.subject,
                 msg:'DONE!!!'
             };
+         case THEME_GET_MULTIPLE_SEC:
+            return {
+                ...state,
+                themesList : action.payload
+            };
         case THEME_GET_ONE:
             return {
                 ...state,
@@ -120,7 +127,7 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 msg:'DONE!!!',
-                THEMEs: changeState(state.THEMEs, action.payload)
+                themes: changeState(state.themes, action.payload)
             }
         case THEME_DELETE_SUCCESS:
             return{

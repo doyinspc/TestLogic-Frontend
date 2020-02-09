@@ -64,7 +64,7 @@ class Form extends React.Component {
   }
 
   componentDidMount = (nextProps) => {
-    if(this.props.isEdit > 0)
+    if(this.props.isEdit > 0 )
     {
       //EDIT LOAD ROW TO BE EDITED FROM PROPS : SUBJECT
       this.setState({
@@ -84,9 +84,9 @@ class Form extends React.Component {
   
 
   componentWillReceiveProps = (nextProps) => {
-      if(this.props.subject.isEdit !== nextProps.subject.isEdit){
+      if(this.props.subject.isEdit && this.props.subject.isEdit !== nextProps.subject.isEdit){
       this.setState({
-        name :  nextProps.subject.subject.name,
+        name : nextProps.subject.subject.name,
         abbrv: nextProps.subject.subject.abbrv
       })
     }
@@ -110,6 +110,7 @@ class Form extends React.Component {
   render() {
     const { classes, subject }  = this.props;
     const { errors, name, abbrv  } = this.state;
+    
     return (
       <div>
         <GridContainer>
@@ -137,7 +138,8 @@ class Form extends React.Component {
                         inputProps={{
                           required: true,
                           value: name || '',
-                          name: "name"
+                          name: "name",
+                          defaultValue: this.props.data.name
                         }}
                       />
                     </GridItem>

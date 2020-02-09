@@ -26,7 +26,6 @@ const path = API_PATH;
 //GET ALL SUBJECT 
 export const getSubjects = () => (dispatch, getState) => {
         let paths = `${path}/subject/`
-        console.log(paths)
         axios.get(paths, subjectSetConfig(getState))
             .then(res => {
                 dispatch({
@@ -174,8 +173,7 @@ export const toggleSubject = (id, active) => (dispatch, getState) =>{
 
 //ACTIVATE OR DEACTIVATE AN SUBJECT
 export const editSubject = id => (dispatch) => {
-    dispatch(
-        {
+    dispatch({
         type : SUBJECT_EDIT,
         payload: id
     });    

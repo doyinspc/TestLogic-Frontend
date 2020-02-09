@@ -42,9 +42,17 @@ function CustomTable({ ...props }) {
   const handleDelete = (num) => {
     props.deleteTheme(num)
   }
-  const handleToggle= (num) => {
-    props.activateTheme(num)
+  const handleToggle= (num, active) => {
+    if(active == 1)
+    {
+      props.toggleTheme(num, 0);
+    }
+    else
+    {
+      props.toggleTheme(num, 1);
+    }
   }
+ 
 
   const activeID= (num) => {
     props.activateTheme(num)
@@ -116,7 +124,7 @@ function CustomTable({ ...props }) {
                   </IconButton>
                 </Tooltip>
                 </span>
-                <span onClick={() => handleToggle(alu.id)}>
+                <span onClick={() => handleToggle(alu.id, alu.active)}>
                 <Tooltip
                   id="tooltip-top-start"
                   title="Activate/Deactivate"

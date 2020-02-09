@@ -1,5 +1,6 @@
 import {
     TOPIC_GET_MULTIPLE,
+    TOPIC_GET_MULTIPLE_SEC,
     TOPIC_GET_ONE,
     TOPIC_REGISTER_SUCCESS,
     TOPIC_REGISTER_FAIL,
@@ -23,6 +24,7 @@ let top = localStorage.getItem('topics') && typeof localStorage.getItem('topics'
 
 const initialState = {
     isLoading: false,
+    topicsList:[],
     topics: top,
     topic: {},
     theme: localStorage.getItem('theme') || null ,
@@ -95,6 +97,11 @@ export default function(state = initialState, action){
                 theme: action.theme,
                 msg:'DONE!!!'
             };
+        case TOPIC_GET_MULTIPLE_SEC:
+            return {
+                ...state,
+                topicsList : action.payload
+            };
         case TOPIC_GET_ONE:
             return {
                 ...state,
@@ -143,7 +150,7 @@ export default function(state = initialState, action){
         case TOPIC_REGISTER_FAIL:
         case TOPIC_DELETE_FAIL:
         case TOPIC_UPDATE_FAIL:
-            alert(action.payload)
+           
             return {
                 ...state,
                 isLoading: false,

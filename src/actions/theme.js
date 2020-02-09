@@ -5,6 +5,7 @@ import {
     THEME_GET,
     THEME_GET_ONE,
     THEME_GET_MULTIPLE,
+    THEME_GET_MULTIPLE_SEC,
     THEME_REGISTER_SUCCESS,
     THEME_REGISTER_FAIL,
     THEME_LOADING,
@@ -29,11 +30,10 @@ export const getThemes = (id) => (dispatch, getState) => {
         let paths = `${path}/theme/cat/${id}` 
         axios.get(paths, themeSetConfig(getState))
             .then(res => {
-                console.log(res.data);
                 dispatch({
                     type: THEME_GET_MULTIPLE,
                     payload: res.data,
-                    subject: id
+                    theme: id
                 })
             })
             .catch(err => {
@@ -42,6 +42,24 @@ export const getThemes = (id) => (dispatch, getState) => {
                     payload: err
                 })
             })
+};
+//GET ALL THEME 
+export const getThemesList = (id) => (dispatch, getState) => {
+    let paths = `${path}/theme/cat/${id}` 
+    axios.get(paths, themeSetConfig(getState))
+        .then(res => {
+            dispatch({
+                type: THEME_GET_MULTIPLE_SEC,
+                payload: res.data,
+                theme: id
+            })
+        })
+        .catch(err => {
+            dispatch({
+                type : THEME_LOADING_ERROR,
+                payload: err
+            })
+        })
 };
 export const getTheme = (num) => (dispatch, getState) => {
         let paths = `${path}/theme/${num}` ;
@@ -103,7 +121,8 @@ export const updateTheme = (data, id) => (dispatch, getState) => {
         .then(res => {
             dispatch({
                 type: THEME_UPDATE_SUCCESS,
-                payload: data
+                payload: data,
+                id:id
             })
         })
         .catch(err => {
@@ -135,24 +154,44 @@ export const deleteTheme = (id) => (dispatch, getState) =>{
 }
 
 //THEME DELETE
-export const toggleTheme = (id) => (dispatch, getState) =>{
+export const toggleTheme = (id, active) => (dispatch, getState) =>{
     dispatch({type : THEME_LOADING});
-    let paths = `${path}/theme/${id}/set_delete` 
-    axios.delete(paths, themeSetConfig(getState))
-        .then(res => {
-            dispatch({
-                type: THEME_DELETE_SUCCESS,
-                payload: res.data
-            })
+    const config ={
+        headers:{
+             'Content-Type':'application/json'
+        }
+    }
+    
+    let paths = `${path}/theme/${id}`;
+    axios.get(paths, themeSetConfig(getState))
+    .then(res => {
+            let act = res.data[0].active == 1? 0 : 1;
+            let body =  JSON.stringify({'active': act});
+            let pathss = `${path}/theme/update/${id}`;
+            axios.patch(pathss, body, config)
+                .then(ress => {
+                    dispatch({
+                        type: THEME_UPDATE_SUCCESS,
+                        payload: ress.data[0],
+                        id:id
+                    })
+                })
+                .catch(err => {
+                    dispatch({
+                        type : THEME_DELETE_FAIL,
+                        payload : err
+                    })
+                })
+    })
+    .catch(err => {
+        dispatch({
+            type : THEME_LOADING_ERROR,
+            payload: err
         })
-        .catch(err => {
-            dispatch({
-                type : THEME_DELETE_FAIL,
-                payload : err
-            })
-        })
+    })
         
 }
+
 
 //ACTIVATE OR DEACTIVATE AN THEME
 export const editTheme = id => (dispatch) => {

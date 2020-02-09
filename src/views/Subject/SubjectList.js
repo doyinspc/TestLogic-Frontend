@@ -59,7 +59,7 @@ render(){
   return (
     <GridContainer>
       { subject.isForm === true ?
-      <GridItem xs={12} sm={12} md={12}><SubjectAdd /></GridItem>: null}
+      <GridItem xs={12} sm={12} md={12}><SubjectAdd  data={subject.subject}/></GridItem>: null}
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader  style={{ display:'flex', flexDirection:'row', justifyContent: 'space-between'}} color="primary">

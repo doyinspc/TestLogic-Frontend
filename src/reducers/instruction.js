@@ -1,5 +1,6 @@
 import {
     INSTRUCTION_GET_MULTIPLE,
+    INSTRUCTION_GET_MULTIPLE_SEC,
     INSTRUCTION_GET_ONE,
     INSTRUCTION_REGISTER_SUCCESS,
     INSTRUCTION_REGISTER_FAIL,
@@ -26,6 +27,7 @@ const initialState = {
     instructions: inst,
     instruction: {},
     topic: localStorage.getItem('topic') || null ,
+    instructionsList: [],
     datas:{},
     msg: null,
     isEdit: 0,
@@ -99,6 +101,11 @@ export default function(state = initialState, action){
                 instructions : action.payload,
                 topic: action.topic,
                 msg:'DONE!!!'
+            };
+         case INSTRUCTION_GET_MULTIPLE_SEC:
+            return {
+                ...state,
+                instructionsList : action.payload
             };
         case INSTRUCTION_GET_ONE:
             return {
