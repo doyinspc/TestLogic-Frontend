@@ -1,7 +1,7 @@
 {
-  "name": "hospitalapp",
+  "name": "TestTricks",
   "version": "1.6.0",
-  "description": "Hospital Management App",
+  "description": "Test Tricks App",
   "private": false,
   "main": "dist/index.js",
   "dependencies": {
@@ -39,7 +39,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "run build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
