@@ -31,6 +31,11 @@ const dashboardRoutes = [
   {path: "/Instruction/:id", name: "Instruction", icon: Person, component: InstructionList, layout: "/admin"},
   {path: "/Content/:id", name: "Content", icon: Person, component: ContentList, layout: "/admin"},
   {path: "/Question/:id", name: "Question", icon: Person, component: QuestionList, layout: "/admin"},
+  {path: "/User/:id", name: "User", icon: Person, component: UserList, layout: "/admin"},
+  {path: "/Test/:id", name: "Test", icon: Person, component: TestList, layout: "/admin"},
+  {path: "/Score/:id", name: "Score", icon: Person, component: ScoreList, layout: "/admin"},
+  {path: "/Mock/:id", name: "Mock", icon: Person, component: MockList, layout: "/admin"},
+  {path: "/Mockscore/:id", name: "Mockscore", icon: Person, component: MockscoreList, layout: "/admin"},
   
   {
     path: "/login-page",
