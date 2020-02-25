@@ -13,6 +13,12 @@ import ThemeList from "views/Theme/ThemeList";
 import TopicList from "views/Topic/TopicList";
 import InstructionList from "views/Instruction/InstructionList";
 import QuestionList from "views/Question/QuestionList";
+import MockList from "views/Mock/MockList";
+import MockscoreList from "views/Mockscore/MockscoreList";
+import TestList from "views/Test/TestList";
+import ScoreList from "views/Score/ScoreList";
+import ResourceList from "views/Resource/ResourceList";
+import UserList from "views/User/UserList";
 // core components/views for Auth layout
 import LoginPage from "views/Pages/LoginPage.jsx";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
@@ -34,6 +40,7 @@ const dashboardRoutes = [
   {path: "/User/:id", name: "User", icon: Person, component: UserList, layout: "/admin"},
   {path: "/Test/:id", name: "Test", icon: Person, component: TestList, layout: "/admin"},
   {path: "/Score/:id", name: "Score", icon: Person, component: ScoreList, layout: "/admin"},
+  {path: "/Resource/:id", name: "Resource", icon: Person, component: ResourceList, layout: "/admin"},
   {path: "/Mock/:id", name: "Mock", icon: Person, component: MockList, layout: "/admin"},
   {path: "/Mockscore/:id", name: "Mockscore", icon: Person, component: MockscoreList, layout: "/admin"},
   
