@@ -25,7 +25,6 @@ class App extends Component{
               <Route path="/admin" component={Admin} />
               <Route path="/auth" component={Auth} />
               <Route path="/rtl" component={RTL} />
-              {/* <Route path="/register-page" render={props => <RegisterPage {...props} />} /> */}
               <Redirect to="/admin/dashboard" />
               <Redirect from="/" to="/admin/dashboard" />
             </Switch>

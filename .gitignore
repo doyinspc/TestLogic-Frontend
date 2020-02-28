@@ -11,6 +11,8 @@
 
 # npmjs
 /dist
+/env-files
+/documentation
 /package-lock.json
 # misc
 .DS_Store
@@ -18,6 +20,8 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+.env.development
 .env
 npm-debug.log*
 yarn-debug.log*

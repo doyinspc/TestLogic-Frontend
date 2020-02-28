@@ -28,6 +28,7 @@ const path = API_PATH;
 //GET ALL THEME 
 export const getThemes = (id) => (dispatch, getState) => {
         let paths = `${path}/theme/cat/${id}` 
+        console.log(paths)
         axios.get(paths, themeSetConfig(getState))
             .then(res => {
                 dispatch({

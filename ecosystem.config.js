@@ -1,9 +1,9 @@
 module.exports = {
   apps: [
     {
-      name: 'material-dashboard-react-app',
+      name: 'testtricks',
       script: 'node_modules/serve/bin/serve.js',
-      args: "-s build -l 3001",
+      args: "-s build -l 3000",
       exec_mode: "fork_mode"
     },
   ],
