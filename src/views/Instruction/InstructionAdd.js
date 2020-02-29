@@ -14,7 +14,6 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
-
 import { getInstruction, editInstruction, updateInstruction, registerInstruction, toggleForm } from  "../../actions/instruction";
 import avatar from "assets/img/faces/marc.jpg";
 
@@ -56,7 +55,7 @@ class Form extends React.Component {
     this.setState({[e.target.name] : e.target.value})
   }
 
-  onEditorChange = ( evt )=>{
+  onEditorChange = ( evt ) =>{
     this.setState( {
         content: evt.editor.getData()
     } );
@@ -232,29 +231,12 @@ handleChange=( changeEvent )=>{
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={12}>
-                    {/* <Input
-                        labelText="Content"
-                        id="content"
-                        type="text"
-                        onChange={this.onChange}
-                        error={errors.content}
-                        multiline
-                        className={classes.input}
-                        placeholder="Add Passage, Essay, Poem etc"
-                        inputProps={{ 'aria-label': 'add question' }}
-                        value={content}
-                        defaultValue={content}
-                        margin='dense'
-                        rows="10"
-                        fullWidth
-                      />
-                     */}
+                   
                     <CKEditor 
+                    
                     data={content}
                     onChange={this.onEditorChange}
-                    
                     mathJaxLib={'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML'}
-                    
                     config={{
                       extraPlugins: ['mathjax']
                       

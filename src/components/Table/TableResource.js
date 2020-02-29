@@ -3,10 +3,8 @@ import PropTypes from "prop-types";
 import classnames from "classnames";
 import { NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
-import Checkbox from "@material-ui/core/Checkbox";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import Table from "@material-ui/core/Table";
@@ -14,15 +12,10 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import CustomSelect from "components/CustomInput/CustomSelect";
 import Button from "components/CustomButtons/Button.jsx";
-import Card from "components/Card/Card.jsx";
-import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
 
@@ -48,9 +41,7 @@ import {
   deleteResource, 
   toggleResource, 
   updateResource, 
-  activateResource, 
-  groupResource,
-  moveResource 
+  activateResource,
 } from  "../../actions/resource";
 
 import { getThemesList } from  "../../actions/theme";
@@ -136,7 +127,7 @@ const updateResourcesList = (e) =>{
   }
   const handleMove = () => {
     if(moveID && topicName && topicName > 0){
-      props.moveResource(moveID, topicName);
+      //props.moveResource(moveID, topicName);
     }
   }
   const handleShift = () => {
@@ -156,7 +147,7 @@ const updateResourcesList = (e) =>{
   }
 
   const handleGroup= (resourceID, num) => {
-      props.groupResource(resourceID, num);
+      //props.groupResource(resourceID, num);
   }
 
   const activeID= (num) => {
@@ -169,11 +160,11 @@ const updateResourcesList = (e) =>{
     <TableRow key={alu.id} className={classes.tableRow }>
         <TableCell className={tableCellClasses}>{++j}</TableCell>
         <TableCell className={tableCellClasses}>
-          <span style={{color: alu.active != 0 ? 'blue' : 'black'}}>{alu.name}</span>
-          <div>{alu.contenttitle}
-          </div>
-          <div dangerouslySetInnerHTML={ { __html: alu.content} }></div>
-          <div style={{fontSize:9, float:'right'}}>{alu.contentsource}</div>
+          <span style={{color: alu.active != 0 ? 'blue' : 'black'}}>{alu.title}</span>
+          <div>{`${alu.author} ${alu.sources} `}</div>
+          <div>{`${alu.description}`}</div>
+          <div dangerouslySetInnerHTML={ { __html: alu.data1} }></div>
+          <div dangerouslySetInnerHTML={ { __html: alu.data2} }></div>
         </TableCell>
         { props.resourcex.showActions ?
         <TableCell className={classes.tableActions}>
@@ -420,9 +411,7 @@ export default connect(mapStateToProps, {
   deleteResource, 
   toggleResource, 
   updateResource,  
-  activateResource, 
-  groupResource,
-  moveResource,
+  activateResource,
   getResourcesList,
   getThemesList,
   getTopicsList,

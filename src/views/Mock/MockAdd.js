@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect }from 'react-redux';
+import CKEditor from 'ckeditor4-react';
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
@@ -15,6 +16,7 @@ import CardFooter from "components/Card/CardFooter.jsx";
 
 import { getMock, editMock, updateMock, registerMock, toggleForm } from  "../../actions/mock";
 import avatar from "assets/img/faces/marc.jpg";
+import { Label } from "reactstrap";
 
 const styles = {
   cardCategoryWhite: {
@@ -40,22 +42,33 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      theme: null,
-      name: null,
+      subject: null,
+      exam_title: null,
+      exam_date: null,
+      exam_objective: null,
+      exam_info: null,
       errors: {}
     };
    
   }
 
+  onInfoChange = ( evt )=>{
+    this.setState( {
+        content: evt.exam_info.getData()
+    } );
+  }
+  onObjectiveChange = ( evt )=>{
+    this.setState( {
+        content: evt.exam_objective.getData()
+    } );
+  }
   onChange = e => {
     this.setState({[e.target.name] : e.target.value})
   }
-
   handleClose = () => {
     this.props.toggleForm(false);
     this.handleReset();
   }
-
   handleReset = () => {
     this.setState({
       name :  ''
@@ -97,8 +110,6 @@ class Form extends React.Component {
     }
     
   }
-  
-
   componentWillReceiveProps = (nextProps) => {
       if(this.props.mock.isEdit !== nextProps.mock.isEdit){
       this.setState({
@@ -107,11 +118,10 @@ class Form extends React.Component {
     }
      
   }
-
   onSubmit = e => {
     e.preventDefault();
-    const {theme,  name } = this.state;
-    const mock = { themeID:theme, name };
+    const {subject, exam_title,  exam_date, exam_info, exam_objective } = this.state;
+    const mock = { subjectID:subject, exam_title, exam_date, exam_info, exam_objective };
     if(this.props.mock.isEdit > 0 )
     {
       this.props.updateMock(mock, this.props.mock.isEdit); 
@@ -123,11 +133,12 @@ class Form extends React.Component {
 
   
   render() {
-    if(this.props.isEdit > 0){
+    if(this.props.isEdit > 0)
+    {
       this.reloadData()
     }
     const { classes, mock }  = this.props;
-    const { errors, name } = this.state;
+    const { errors, exam_title, exam_objective, exam_date, exam_info } = this.state;
     return (
       <div>
         <GridContainer>
@@ -142,10 +153,10 @@ class Form extends React.Component {
                 </CardHeader>
                 <CardBody>
                   <GridContainer>
-                    <GridItem xs={12} sm={12} md={12}>
+                    <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
-                        labelText="Mock"
-                        id="name"
+                        labelText="Mock Title"
+                        id="exam_title"
                         type="text"
                         onChange={this.onChange}
                         error={errors.name}
@@ -154,12 +165,56 @@ class Form extends React.Component {
                         }}
                         inputProps={{
                           required: true,
-                          value: name || '',
-                          name: "name"
+                          value: exam_title || '',
+                          name: "exam_title"
                         }}
                       />
                     </GridItem>
-                    
+                    <GridItem xs={12} sm={12} md={6}>
+                      <CustomInput
+                        labelText="Exam Date"
+                        id="exam_date"
+                        type="datetime"
+                        onChange={this.onChange}
+                        error={errors.exam_date}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          required: true,
+                          value: exam_date || '',
+                          name: "exam_date",
+                          type: 'datetime'
+                        }}
+                      />
+                    </GridItem>
+                    </GridContainer>
+                    <GridContainer>
+                    <GridItem xs={12} sm={12} md={12}><Label >Exam Objective</Label></GridItem>
+                    <GridItem xs={12} sm={12} md={12}>
+                    <CKEditor 
+                    data={exam_objective}
+                    onChange={this.onObjectiveChange}
+                    mathJaxLib={'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML'}
+                    config={{
+                      extraPlugins: ['mathjax']
+                    }}
+                     />
+                    </GridItem>
+                  </GridContainer>
+                  <GridContainer>
+                  <GridItem xs={12} sm={12} md={12}><Label >Exam Full Details</Label></GridItem>
+                    <GridItem xs={12} sm={12} md={12}>
+                    <CKEditor 
+                    data={exam_info}
+                    name='Full Info.'
+                    onChange={this.onObjectiveChange}
+                    mathJaxLib={'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML'}
+                    config={{
+                      extraPlugins: ['mathjax']
+                    }}
+                     />
+                    </GridItem>
                   </GridContainer>
                 </CardBody>
                 <CardFooter style={{ display:'flex', flexDirection:'row', justifyContent: 'space-between'}}>

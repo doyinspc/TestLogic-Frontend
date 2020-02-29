@@ -16,19 +16,18 @@ import {
     RESOURCE_RESET,
     RESOURCE_HIDE,
     RESOURCE_FORM,
-    RESOURCE_ACTIVE,
-    RESOURCE_DATAS
+    RESOURCE_ACTIVE
 } from "../types/resource";
 
-let inst = localStorage.getItem('resources') && typeof localStorage.getItem('resources') !== 'undefined' ? JSON.parse(localStorage.getItem('resources')): [];
+
+let the = localStorage.getItem('resources') && typeof localStorage.getItem('resources') !== 'undefined' ? JSON.parse(localStorage.getItem('resources')): [];
 
 const initialState = {
     isLoading: false,
-    resources: inst,
+    resources: the,
     resource: {},
+    resourcesList:[],
     topic: localStorage.getItem('topic') || null ,
-    resourcesList: [],
-    datas:{},
     msg: null,
     isEdit: 0,
     isForm: false,
@@ -39,7 +38,7 @@ const changeState = (aluu, actid) =>
 {
     let newRESOURCE = [...aluu];
     newRESOURCE.forEach(alu => {
-        if(alu.id == actid.id){
+        if(alu.id === actid.id){
             alu.is_active = actid.is_active
         }
     });
@@ -59,15 +58,10 @@ const changeRESOURCE = (aluu, actid) =>
 
 export default function(state = initialState, action){
     switch (action.type) {
-        case RESOURCE_DATAS:
-            return {
-                ...state,
-                datas:action.payload
-        };
         case RESOURCE_ACTIVE:
             return {
                 ...state,
-                resource:action.payload
+                ca:action.payload
         };
         case RESOURCE_FORM:
             return {
@@ -94,12 +88,12 @@ export default function(state = initialState, action){
                 isLoading : true
             };
         case RESOURCE_GET_MULTIPLE:
-            localStorage.setItem('topic', action.topic);
+            localStorage.setItem('subject', action.subject);
             localStorage.setItem('resources', JSON.stringify(action.payload));
             return {
                 ...state,
                 resources : action.payload,
-                topic: action.topic,
+                subject: action.subject,
                 msg:'DONE!!!'
             };
          case RESOURCE_GET_MULTIPLE_SEC:
@@ -133,7 +127,7 @@ export default function(state = initialState, action){
             return{
                 ...state,
                 msg:'DONE!!!',
-                RESOURCEs: changeState(state.RESOURCEs, action.payload)
+                resources: changeState(state.resources, action.payload)
             }
         case RESOURCE_DELETE_SUCCESS:
             return{

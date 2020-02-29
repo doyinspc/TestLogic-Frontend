@@ -28,12 +28,13 @@ const path = API_PATH;
 //GET ALL RESOURCE 
 export const getResources = (id) => (dispatch, getState) => {
         let paths = `${path}/resource/cat/${id}` 
+        console.log(paths)
         axios.get(paths, resourceSetConfig(getState))
             .then(res => {
                 dispatch({
                     type: RESOURCE_GET_MULTIPLE,
                     payload: res.data,
-                    topic: id
+                    resource: id
                 })
             })
             .catch(err => {
@@ -51,7 +52,7 @@ export const getResourcesList = (id) => (dispatch, getState) => {
             dispatch({
                 type: RESOURCE_GET_MULTIPLE_SEC,
                 payload: res.data,
-                topic: id
+                resource: id
             })
         })
         .catch(err => {
@@ -91,9 +92,11 @@ export const registerResource = (data) => (dispatch) => {
     let paths = `${path}/resource/register` 
     axios.post(paths, JSON.stringify(data), config)
         .then(res => {
+            let newdata = data;
+            newdata['id'] = res.insertId;
             dispatch({
-                type: RESOURCE_GET_MULTIPLE,
-                payload: res.data
+                type: RESOURCE_REGISTER_SUCCESS,
+                payload: newdata
             })
         })
         .catch(err => {
@@ -103,7 +106,7 @@ export const registerResource = (data) => (dispatch) => {
             })
         })
 };
-//RESOURCE EDIT
+//RESOURCE EDIT/DELETE
 export const updateResource = (data, id) => (dispatch, getState) => {
     //body
     const config ={
@@ -111,14 +114,16 @@ export const updateResource = (data, id) => (dispatch, getState) => {
              'Content-Type':'application/json'
         }
     }
+    
     let paths = `${path}/resource/update/${id}` 
-    let body =  JSON.stringify(data);
+    let body =  JSON.stringify(data)
     data['id'] = id;
     axios.patch(paths, body, config)
         .then(res => {
             dispatch({
                 type: RESOURCE_UPDATE_SUCCESS,
-                payload: res.data[0]
+                payload: data,
+                id:id
             })
         })
         .catch(err => {
@@ -128,55 +133,6 @@ export const updateResource = (data, id) => (dispatch, getState) => {
             })
         })
 };
-
-//RESOURCE EDIT/DELETE
-export const groupResource = (id, groupNumber) => (dispatch, getState) => {
-    //body
-    const config ={
-        headers:{
-             'Content-Type':'application/json'
-        }
-    }
-    let paths = `${path}/resource/group/${id}` 
-    let body =  JSON.stringify({grp:groupNumber});
-    axios.patch(paths, body, config)
-        .then(res => {
-            dispatch({
-                msg: 'done'
-            })
-        })
-        .catch(err => {
-            dispatch({
-                type : RESOURCE_UPDATE_FAIL,
-                payload: err
-            })
-        })
-};
-
-// MOVE RESOURCE 
-export const moveResource = (id, groupNumber) => (dispatch, getState) => {
-    //body
-    const config ={
-        headers:{
-             'Content-Type':'application/json'
-        }
-    }
-    let paths = `${path}/resource/move/${id}` 
-    let body =  JSON.stringify({resourceID:groupNumber});
-    axios.patch(paths, body, config)
-        .then(res => {
-            dispatch({
-                msg: 'done'
-            })
-        })
-        .catch(err => {
-            dispatch({
-                type : RESOURCE_UPDATE_FAIL,
-                payload: err
-            })
-        })
-};
-
 
 //RESOURCE DELETE
 export const deleteResource = (id) => (dispatch, getState) =>{
@@ -199,24 +155,44 @@ export const deleteResource = (id) => (dispatch, getState) =>{
 }
 
 //RESOURCE DELETE
-export const toggleResource = (id) => (dispatch, getState) =>{
+export const toggleResource = (id, active) => (dispatch, getState) =>{
     dispatch({type : RESOURCE_LOADING});
-    let paths = `${path}/resource/${id}/set_delete` 
-    axios.delete(paths, resourceSetConfig(getState))
-        .then(res => {
-            dispatch({
-                type: RESOURCE_DELETE_SUCCESS,
-                payload: res.data
-            })
+    const config ={
+        headers:{
+             'Content-Type':'application/json'
+        }
+    }
+    
+    let paths = `${path}/resource/${id}`;
+    axios.get(paths, resourceSetConfig(getState))
+    .then(res => {
+            let act = res.data[0].active == 1? 0 : 1;
+            let body =  JSON.stringify({'active': act});
+            let pathss = `${path}/resource/update/${id}`;
+            axios.patch(pathss, body, config)
+                .then(ress => {
+                    dispatch({
+                        type: RESOURCE_UPDATE_SUCCESS,
+                        payload: ress.data[0],
+                        id:id
+                    })
+                })
+                .catch(err => {
+                    dispatch({
+                        type : RESOURCE_DELETE_FAIL,
+                        payload : err
+                    })
+                })
+    })
+    .catch(err => {
+        dispatch({
+            type : RESOURCE_LOADING_ERROR,
+            payload: err
         })
-        .catch(err => {
-            dispatch({
-                type : RESOURCE_DELETE_FAIL,
-                payload : err
-            })
-        })
+    })
         
 }
+
 
 //ACTIVATE OR DEACTIVATE AN RESOURCE
 export const editResource = id => (dispatch) => {
@@ -227,13 +203,6 @@ export const editResource = id => (dispatch) => {
     });    
 };
 
-export const activateResource = id => (dispatch) => {
-    dispatch(
-        {
-        type : RESOURCE_ACTIVATE_SUCCESS,
-        payload: id
-    });    
-};
 
 export const toggleForm = (form) => (dispatch) => {
     dispatch({
@@ -248,6 +217,13 @@ export const hideActions = () => (dispatch) => {
             })
 };
 
+export const activateResource = id => (dispatch) => {
+    dispatch(
+        {
+        type : RESOURCE_ACTIVATE_SUCCESS,
+        payload: id
+    });    
+};
 
 //SET TOKEN AND HEADER - HELPER FUNCTION
 export const resourceSetConfig = () => {

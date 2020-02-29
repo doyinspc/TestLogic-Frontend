@@ -45,8 +45,6 @@ const styles = {
   }
 };
 
-
-
 class TableList extends React.Component {
 
 componentDidMount = () =>{
@@ -54,7 +52,6 @@ componentDidMount = () =>{
 }
 
 render(){
-
   const { classes, resource, topic, topics, themes, subjects, id } = this.props;
   let headArr =  resource.showActions ? ["SN","Resource", "Action"]: ["SN","Resource"];
   let top = topics && Array.isArray(topics) && topics.length > 0 ? topics.filter((alu)=> alu.id == id)[0]: {name:'None'};
@@ -69,11 +66,11 @@ render(){
         <Card>
           <CardHeader  style={{ display:'flex', flexDirection:'row', justifyContent: 'space-between'}} color="primary">
             <div className="col-md-5">
-            <h4 className={classes.cardTitleWhite}>{top ? top.name: '' || ''}</h4>
-            <p className={classes.cardCategoryWhite}>{sub ? sub.name: ''  +' | '+ the  ? the.name: ''}</p>
+            <h4 className={classes.cardTitleWhite}>{top ? top.name: '' || '' }</h4>
+              <p className={classes.cardCategoryWhite}>{sub ? sub.name: ''  +' | '+ the  ? the.name: ''}</p>
             </div>
             <div>
-              <ResourceNavbar id={top? top.themeID : ''}/>
+              <ResourceNavbar id={top ? top.themeID : ''}/>
             </div>
           </CardHeader>
           <CardBody>

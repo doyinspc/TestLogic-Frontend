@@ -14,6 +14,7 @@ import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import CardFooter from "components/Card/CardFooter.jsx";
+import {Label} from "reactstrap";
 
 import { getResource, editResource, updateResource, registerResource, toggleForm } from  "../../actions/resource";
 import avatar from "assets/img/faces/marc.jpg";
@@ -42,11 +43,14 @@ class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      theme: null,
-      name: null,
-      content:null,
-      contenttitle:null,
-      contentsource:null,
+      topic: props.id,
+      data1: null,
+      data2:null,
+      sources:null,
+      author:null,
+      title:null,
+      description: null,
+      types: null,
       errors: {}
     };
    
@@ -56,17 +60,16 @@ class Form extends React.Component {
     this.setState({[e.target.name] : e.target.value})
   }
 
-  onEditorChange = ( evt )=>{
+  onData2Change = ( evt )=>{
     this.setState( {
-        content: evt.editor.getData()
+        data2: evt.editor.getData()
     } );
   }
-
-handleChange=( changeEvent )=>{
+  onData1Change = ( evt )=>{
     this.setState( {
-        data: changeEvent.target.value
+        data1: evt.editor.getData()
     } );
-}
+  }
 
   handleClose = () => {
     this.props.toggleForm(false);
@@ -75,10 +78,13 @@ handleChange=( changeEvent )=>{
 
   handleReset = () => {
     this.setState({
-      name :  '',
-      content: '',
-      contenttitle: '',
-      contentsource:''
+      title:  '',
+      data1: '',
+      data2: '',
+      author:'',
+      description:'',
+      types:'',
+      sources:'',
     })
   }
 
@@ -88,22 +94,26 @@ handleChange=( changeEvent )=>{
     {
       //EDIT LOAD ROW TO BE EDITED FROM PROPS : RESOURCE
       this.setState({
-        theme: this.props.resource.theme,
-        name :  this.props.resource.resource.name,
-        content :  this.props.resource.resource.content,
-        contenttitle :  this.props.resource.resource.contenttitle,
-        contentsource :  this.props.resource.resource.contentsource
+        title: this.props.resource.title,
+        data1 :  this.props.resource.resource.data1,
+        data2 :  this.props.resource.resource.data2,
+        author :  this.props.resource.resource.author,
+        description :  this.props.resource.resource.description,
+        types :  this.props.resource.resource.types,
+        sources :  this.props.resource.resource.sources,
       })
     }else
     {
       //ADD CLEAR RECORD TO BLANK
       this.setState({
-        theme: this.props.resource.theme,
-        name :  '',
-        content: '',
-        contenttitle: '',
-        contentsource: ''
-      })
+        title: '',
+        data1: '',
+        data2: '',
+        author:'',
+        description:'',
+        types:'',
+        sources:'',
+        })
     }
     
   }
@@ -112,21 +122,25 @@ handleChange=( changeEvent )=>{
     {
       //EDIT LOAD ROW TO BE EDITED FROM PROPS : RESOURCE
       this.setState({
-        theme: this.props.resource.theme,
-        name :  this.props.resource.resource.name,
-        content :  this.props.resource.resource.content,
-        contenttitle :  this.props.resource.resource.contenttitle,
-        contentsource :  this.props.resource.resource.contentsource
+        title: this.props.resource.title,
+        data1 :  this.props.resource.resource.data1,
+        data2 :  this.props.resource.resource.data2,
+        author :  this.props.resource.resource.author,
+        description :  this.props.resource.resource.description,
+        types :  this.props.resource.resource.types,
+        sources :  this.props.resource.resource.sources,
       })
     }else
     {
       //ADD CLEAR RECORD TO BLANK
       this.setState({
-        theme: this.props.resource.theme,
-        name :  '',
-        content :  '',
-        contenttitle :  '',
-        contentsource:  ''
+        title: '',
+        data1: '',
+        data2: '',
+        author:'',
+        description:'',
+        types:'',
+        sources:'',
       })
     }
     
@@ -136,10 +150,13 @@ handleChange=( changeEvent )=>{
   componentWillReceiveProps = (nextProps) => {
       if(this.props.resource.isEdit !== nextProps.resource.isEdit){
       this.setState({
-        name :  nextProps.resource.resource.name,
-        content :  nextProps.resource.resource.content,
-        contenttitle :  nextProps.resource.resource.contenttitle,
-        contentsource :  nextProps.resource.resource.contentsource
+        title: nextProps.resource.resource.title,
+        data1 :  nextProps.resource.resource.data1,
+        data2 :  nextProps.resource.resource.data2,
+        author :  nextProps.resource.resource.author,
+        description :  nextProps.resource.resource.description,
+        types :  nextProps.resource.resource.types,
+        sources :  nextProps.resource.resource.sources,
       })
     }
      
@@ -147,8 +164,8 @@ handleChange=( changeEvent )=>{
 
   onSubmit = e => {
     e.preventDefault();
-    const {theme,  name, content, contentsource, contenttitle } = this.state;
-    const resource = { theme, name, content, contentsource, contenttitle };
+    const {topic, title, data1, data2, author, description, types, sources } = this.state;
+    const resource = { topicID:topic, title, data1, data2, author, description, types, sources};
     if(this.props.resource.isEdit > 0 )
     {
       this.props.updateResource(resource, this.props.resource.isEdit); 
@@ -161,10 +178,10 @@ handleChange=( changeEvent )=>{
   
   render() {
     if(this.props.isEdit > 0){
-      this.reloadData()
+      this.reloadData();
     }
     const { classes, resource }  = this.props;
-    const { errors, name, content, contentsource, contenttitle } = this.state;
+    const { errors, title, data1, data2, author, description, types, sources } = this.state;
     return (
       <div>
         <GridContainer>
@@ -179,85 +196,127 @@ handleChange=( changeEvent )=>{
                 </CardHeader>
                 <CardBody>
                   <GridContainer>
-                    <GridItem xs={12} sm={12} md={12}>
+                    <GridItem xs={12} sm={12} md={6}>
                       <CustomInput
-                        labelText="Resource"
-                        id="name"
+                        labelText="Resource Title"
+                        id="title"
                         type="text"
                         onChange={this.onChange}
-                        error={errors.name}
+                        error={errors.title}
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           required: true,
-                          value: name || '',
-                          name: "name"
+                          value: title || '',
+                          name: "title"
                         }}
                       />
                       
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
                     <CustomInput
-                        labelText="Content Title"
-                        id="contenttitle"
+                        labelText="Resource Author"
+                        id="author"
                         type="text"
                         onChange={this.onChange}
-                        error={errors.contenttitle}
+                        error={errors.author}
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           required: false,
-                          value: contenttitle || '',
-                          name: "contenttitle"
+                          value: author || '',
+                          name: "author"
+                        }}
+                      />
+                    </GridItem>
+                    </GridContainer>
+
+                    <GridContainer>
+                    <GridItem xs={12} sm={12} md={6}>
+                    <CustomInput
+                        labelText="Resource Source"
+                        id="sources"
+                        type="text"
+                        onChange={this.onChange}
+                        error={errors.sources}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          required: false,
+                          value: sources || '',
+                          name: "sources"
                         }}
                       />
                     </GridItem>
                     <GridItem xs={12} sm={12} md={6}>
                     <CustomInput
-                        labelText="Content Source"
-                        id="contentsource"
+                        labelText="Resource Type"
+                        id="types"
                         type="text"
                         onChange={this.onChange}
-                        error={errors.contentsource}
+                        error={errors.types}
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
                           required: false,
-                          value: contentsource || '',
-                          name: "contentsource"
+                          value: types || '',
+                          name: "types"
                         }}
                       />
                     </GridItem>
+                    </GridContainer>
+                    <GridContainer>
                     <GridItem xs={12} sm={12} md={12}>
-                    {/* <Input
-                        labelText="Content"
-                        id="content"
+                    <CustomInput
+                        labelText="Resource Description"
+                        id="description"
                         type="text"
                         onChange={this.onChange}
-                        error={errors.content}
-                        multiline
-                        className={classes.input}
-                        placeholder="Add Passage, Essay, Poem etc"
-                        inputProps={{ 'aria-label': 'add question' }}
-                        value={content}
-                        defaultValue={content}
-                        margin='dense'
-                        rows="10"
-                        fullWidth
+                        error={errors.description}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          required: false,
+                          value: description || '',
+                          name: "description"
+                        }}
                       />
-                     */}
+                    </GridItem>
+                    </GridContainer>
+
+                    <GridContainer>
+                    <GridItem xs={12} sm={12} md={12}><Label >Data 1</Label></GridItem>
+                    <GridItem xs={12} sm={12} md={12}>
                     <CKEditor 
-                    data={content}
-                    onChange={this.onEditorChange}
-                    
+                    id='data1'
+                    name='data1'
+                    data={data1}
+                    onChange={this.onData1Change}
                     mathJaxLib={'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML'}
-                    
                     config={{
                       extraPlugins: ['mathjax']
-                      
+                    }}
+                     />
+                    </GridItem>
+                  </GridContainer>
+
+                  <GridContainer>
+                    <GridItem xs={12} sm={12} md={12}><Label >Data 2</Label></GridItem>
+                    <GridItem xs={12} sm={12} md={12}>
+                    <CKEditor 
+                    id='data2'
+                    name='data2'
+                    data={data1}
+                    data={data2}
+                    onChange={this.onData2Change}
+                    mathJaxLib={'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML'}
+                    config={{
+                      extraPlugins: ['mathjax']
                     }}
                      />
                     </GridItem>

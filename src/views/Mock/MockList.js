@@ -55,10 +55,8 @@ componentDidMount = () =>{
 
 render(){
 
-  const { classes, mock, theme, themes, subjects, id } = this.props;
- 
+  const { classes, mock, subjects, id } = this.props;
   let headArr =  mock.showActions ? ["SN","Mock", "Action"]: ["SN","Mock"];
-  let the = themes && Array.isArray(themes) && themes.length > 0 ? themes.filter((alu)=> alu.id == id)[0]:{};
   let ses = subjects && Array.isArray(subjects) && subjects.length > 0 ? subjects.filter((alu)=> alu.id == id)[0]:{};
   return (
     <GridContainer>
@@ -68,12 +66,11 @@ render(){
         <Card>
           <CardHeader  style={{ display:'flex', flexDirection:'row', justifyContent: 'space-between'}} color="primary">
             <div className="col-md-5">
-            <p className={classes.cardCategoryWhite}>{ses.name || 'None'}</p>
-            <h4 className={classes.cardTitleWhite}>{the.name || 'None'} Mocks</h4>
-            
+            <p className={classes.cardCategoryWhite}>{ses.name || 'None'}</p>           
+            <p className={classes.cardCategoryWhite}> </p>
             </div>
             <div>
-              <MockNavbar id={the.subjectID}/>
+              <MockNavbar/>
             </div>
           </CardHeader>
           <CardBody>
@@ -95,8 +92,6 @@ TableList.propTypes = {
 };
 const mapStateToProps = (state, ownProps) => ({ 
     mock: state.mockReducer,
-    theme: state.themeReducer,
-    themes: state.themeReducer.themes,
     subjects: state.subjectReducer.subjects,
     id : ownProps.match.params.id
 })

@@ -76,6 +76,18 @@ function CustomTable({ ...props }) {
                   </IconButton>
                 </Tooltip>
                 </NavLink>
+                <NavLink to={`/admin/Mock/${alu.id}`}>
+                <Tooltip
+                  id="tooltip-top"
+                  title="Mocks"
+                  placement="top"
+                  classes={{ tooltip: classes.tooltip }}
+                >
+                  <IconButton aria-label="Edit" className={classes.tableActionButton}>
+                    <CalendarViewDay className={ classes.tableActionButtonIcon + " text-info"  }/>
+                  </IconButton>
+                </Tooltip>
+                </NavLink>
               <NavLink to={`/Subject/${alu.id}`}>
                 <Tooltip
                   id="tooltip-top"
