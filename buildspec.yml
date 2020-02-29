@@ -5,6 +5,8 @@ phases:
         commands:
             #install Node 12
             - echo installing Node...
+            - curl -sL https://deb.nodesource.com/setup_12.x | bash -
+            - apt install -y nodejs
             #install yarn
             - echo installing yarn...
             - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
