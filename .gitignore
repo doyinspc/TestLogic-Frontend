@@ -10,7 +10,7 @@
 #/build
 
 # npmjs
-/dist
+
 /env-files
 /documentation
 /package-lock.json
