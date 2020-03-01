@@ -5,24 +5,9 @@ phases:
         commands:
             #install Node 12
             - echo installing Node...
-            - curl -sL https://deb.nodesource.com/setup_12.x | bash -
-            - apt install -y nodejs
+            - npm install
+            - npm run build
             #install yarn
-            - echo installing yarn...
-            - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-            - echo "deb https://dl.yarnpkg.com/debian/ stable main" |  tee /etc/apt/sources.list.d/yarn.list
-            - apt install --no-install-recommends yarn
-    pre_build:
-        commands:
-            - echo Installing dependencies ....
-            - yarn
-    build:
-        commands:
-            - echo building ......
-            - yarn build
-artifacts:
-    files: 
-        - "**/*"
-    discard-paths: no
-    base-directory: dist
-
+            - aws s3 cp build s3://$S3_BUCKET --recursive --exclude 'index.html'
+            - aws s3 cp build/index.html s4://$S3_BUCKET
+    
