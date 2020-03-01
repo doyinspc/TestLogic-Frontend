@@ -75,7 +75,6 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@babel/core": "^7.8.6",
     "@babel/preset-env": "^7.8.6",
     "@babel/preset-es2015": "^7.0.0-beta.53",
     "@babel/preset-react": "^7.8.3",
