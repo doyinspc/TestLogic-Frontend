@@ -6,7 +6,7 @@ phases:
             #install Node 12
             - echo installing Node...
             - npm install
-            - npm run build
+            - npm run-script build
             #install yarn
             - echo building..........
             - aws s3 cp build s3://$S3_BUCKET --recursive --exclude 'index.html'
